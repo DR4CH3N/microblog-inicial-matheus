@@ -48,6 +48,20 @@ final class Usuario {
     }
     }
 
+    public function listarUm():array {
+        $sql = "SELECT * FROM usuarios WHERE id = :id";
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindParam(":id", $this->id, PDO::PARAM_INT);
+            $consulta->execute();
+            $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $erro) {
+            die("Erro: ". $erro->getMessage());
+        }
+        return $resultado;
+    }
+
     public function codificaSenha(string $senha):string {
         return password_hash($senha, PASSWORD_DEFAULT);
     }
