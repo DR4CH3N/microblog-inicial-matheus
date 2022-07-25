@@ -10,7 +10,37 @@ $usuario = new Usuario;
 $usuario->setId($_GET['id']);
 $dados = $usuario->listarUm();
 
-Utilitarios::dump($dados);
+// Utilitarios::dump($dados);
+
+if (isset($_POST['atualizar'])) {
+	$usuario->setNome($_POST['nome']);
+	$usuario->setEmail($_POST['email']);
+	$usuario->setTipo($_POST['tipo']);
+
+	// LOGICA DA SENHA:
+
+	/* algoritmo da senha
+	se o campo senha do furmulario no formulario estiver vazio, 
+	signfica que o usuario NÃO MUDOU A SENHA.
+	*/
+	if (empty($_POST['senha']) ) {
+		$usuario->setSenha( $dados['senha'] );
+		echo $usuario->getSenha();
+	}
+	else {
+		/* Caso contrario, se o usuario digitou alguma coisa no campo senha, precisaremos verificar o que foi digitado 
+		*/
+
+		$usuario->setSenha(  
+			$usuario->verificaSenha($_POST['senha'], $dados['senha'])
+		);
+
+		// echo $usuario->verificaSenha($_POST['senha'], $dados['senha']);
+	}
+
+	$usuario->atualizar();
+	header("location:usuarios.php");
+}
 
 ?>
 
@@ -22,16 +52,16 @@ Utilitarios::dump($dados);
 		Atualizar dados do usuário
 		</h2>
 				
-		<form class="mx-auto w-75" action="" method="post" id="form-atualizar" name="form-atualizar">
+		<form class="mx-auto w-75" action="" method="post" id="form-atualizar" name="<?=$dados['id']?>">
 
 			<div class="mb-3">
-				<label class="form-label" for="nome">Nome:</label>
-				<input class="form-control" type="text" id="nome" name="nome" required>
+				<label class="form-label" for="nome">nome:</label>
+				<input value="<?=$dados['nome']?>" class="form-control" type="text" id="nome" name="nome" required>
 			</div>
 
 			<div class="mb-3">
-				<label class="form-label" for="email">E-mail:</label>
-				<input class="form-control" type="email" id="email" name="email" required>
+				<label class="form-label" for="email">email:</label>
+				<input value="<?=$dados['email']?>" class="form-control" type="email" id="email" name="email" required>
 			</div>
 
 			<div class="mb-3">
@@ -40,11 +70,14 @@ Utilitarios::dump($dados);
 			</div>
 
 			<div class="mb-3">
-				<label class="form-label" for="tipo">Tipo:</label>
+				<label class="form-label" for="tipo"><?=$dados['tipo']?></label>
 				<select class="form-select" name="tipo" id="tipo" required>
 					<option value=""></option>
-					<option value="editor">Editor</option>
-					<option value="admin">Administrador</option>
+					<option <?php if ($dados['tipo'] == 'editor') echo ' selected ' ?>
+					value="editor">Editor</option>
+
+
+					<option <?php if ($dados['tipo'] == 'admin') echo ' selected ' ?> value="admin">Administrador</option>
 				</select>
 			</div>
 			

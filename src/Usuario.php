@@ -62,8 +62,39 @@ final class Usuario {
         return $resultado;
     }
 
+    public function atualizar():void {
+        $sql = "UPDATE usuarios SET nome = :nome, email = :email, senha = :senha, tipo = :tipo WHERE id = :id";
+        
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindParam(":nome", $this->nome, PDO::PARAM_STR);
+            $consulta->bindParam(":email", $this->email, PDO::PARAM_STR);
+            $consulta->bindParam(":senha", $this->senha, PDO::PARAM_STR);
+            $consulta->bindParam(":tipo", $this->tipo, PDO::PARAM_STR);
+            $consulta->bindParam(":id", $this->id, PDO::PARAM_INT);
+            $consulta->execute();
+        } catch (Exception $erro) {
+            die("Erro: ". $erro->getMessage());   
+        }
+    }
+
     public function codificaSenha(string $senha):string {
         return password_hash($senha, PASSWORD_DEFAULT);
+    }
+
+    public function verificaSenha(string $senhaFormulario, string $senhaBanco):string {
+        
+
+        /* usamos a password_verify para comparar as duas senhas: 
+        a digitada no formulario e a existente no banco
+        */
+        if ( password_verify($senhaFormulario, $senhaBanco) ) {
+            // se forem iguais, mantemos a senha existente no banco
+            return $senhaBanco;
+        } else {
+            // se forem diferentes, então codificamos essa nova senha
+            return $this->codificaSenha($senhaFormulario);
+        }
     }
     
     
