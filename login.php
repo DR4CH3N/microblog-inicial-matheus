@@ -1,4 +1,8 @@
-<?php 
+<?php
+
+use Microblog\Usuario;
+use Microblog\Utilitarios;
+
 require_once "inc/cabecalho.php";
 
 /* 
@@ -8,6 +12,12 @@ mensagens de feedback relacionados ao acesso
 if (isset($_GET['acesso_proibido']) ) {
 	$feedback = "Você deve logar primeiro... 🗿";
 }
+	elseif ((isset($_GET['campos_obrigatorios'])) ) {
+	$feedback = 'voce deve preencher os dois campos! 🙄';
+	}
+	elseif (isset($_GET['nao_encontrado']) ) {
+		$feedback = 'Usuario não encontrado!';
+	}
 ?>
 
 
@@ -35,7 +45,40 @@ if (isset($_GET['acesso_proibido']) ) {
 				<button class="btn btn-primary btn-lg" name="entrar" type="submit">Entrar</button>
 
 			</form>
-    </div>
+			<?php
+			if (isset($_POST['entrar']) ) {
+				
+				// verificação de campos
+				if (empty($_POST['email']) || empty($_POST['senha'])) {
+					header("location:login.php?campos_obrigatorios");
+				} else {
+					// capturamos o email informado
+					$usuario = new Usuario;
+					$usuario->setEmail($_POST['email']);
+
+					// buscando um usuario no banco a partir do e-mail
+					$dados = $usuario->buscar();
+
+					if (!$dados) {
+						// então, fica no login e da um feedback
+						header("location:login.php?nao_encontrado");
+					} else {
+						/* verificação da senha e login */
+						if ( password_verify($_POST['senha'], $dados['senha'] )) {
+							echo "o fulano pode entrar!";
+						} else {
+							echo "SAIA IMEDIATAMENTE 💀💀💀";
+						}
+						
+					}
+					
+					// Utilitarios::dump($dados);
+				}
+				
+			}
+			
+			?>
+        </div>
     
     
 </div>        
