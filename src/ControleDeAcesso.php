@@ -4,7 +4,7 @@ namespace Microblog;
 
 final class ControleDeAcesso 
 {
-    public function __destruct()
+    public function __construct()
     {
         // Se NÃO EXISTIR uma sessão em funcionamento
 
@@ -17,8 +17,9 @@ final class ControleDeAcesso
 
     public function verificaAcesso():void {
         // se NÃO EXISTIR uma variavel de acesso relacionada ao ID do usuario logado...
-
+        
         if ( !isset($_SESSION['id']) ) {
+            
             /* então significa que o usuario não esta logado, portanto apague qualquer
             requicio de sessão e force o usuario a ir para o login.php */
             session_destroy();
@@ -35,4 +36,18 @@ final class ControleDeAcesso
         $_SESSION['nome'] = $nome;
         $_SESSION['tipo'] = $tipo;
     }
+
+    public function logout():void {
+        session_start();
+        session_destroy();
+        header("location:../login.php?logout");
+        die(); // exit;
+    }
+
+//     public function estaAutorizado($dados, $tipo):array {
+//         //os indices equivalem a nivel 1 e nivel 2
+//         $tipo = [
+//             'admin' => ['noticias.php', 'categorias.php', 'usuarios.php','meu-perfil.php' ],
+//             'editor' => ['noticias.php', 'meu-perfil.php']
+//         ];
 }

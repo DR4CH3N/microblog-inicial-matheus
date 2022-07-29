@@ -1,5 +1,6 @@
 <?php
 
+use Microblog\ControleDeAcesso;
 use Microblog\Usuario;
 use Microblog\Utilitarios;
 
@@ -17,6 +18,11 @@ if (isset($_GET['acesso_proibido']) ) {
 	}
 	elseif (isset($_GET['nao_encontrado']) ) {
 		$feedback = 'Usuario não encontrado!';
+	}
+	elseif (isset($_GET['senha_incorreta']) ) {
+		$feedback = 'senha incorreta';
+	} elseif (isset($_GET['logout']) ) {
+		$feedback = 'Você saiu do sistema';
 	}
 ?>
 
@@ -59,15 +65,25 @@ if (isset($_GET['acesso_proibido']) ) {
 					// buscando um usuario no banco a partir do e-mail
 					$dados = $usuario->buscar();
 
+
+
+						// Utilitarios::dump($dados);
+						// die();
+
 					if (!$dados) {
 						// então, fica no login e da um feedback
 						header("location:login.php?nao_encontrado");
 					} else {
 						/* verificação da senha e login */
 						if ( password_verify($_POST['senha'], $dados['senha'] )) {
-							echo "o fulano pode entrar!";
+							// estando certa, sera feito o login
+							// die('OK!');
+							$sessao = new ControleDeAcesso;
+							$sessao->login($dados['id'], $dados['nome'], $dados['tipo'] );
+							header("location:admin/index.php");
 						} else {
-							echo "SAIA IMEDIATAMENTE 💀💀💀";
+							// caso contrario, mantenha na pagina login e apresente uma mensagem
+							header("location:login.php?senha_incorreta");
 						}
 						
 					}
