@@ -10,6 +10,8 @@ $usuario = new Usuario;
 $usuario->setId($_GET['id']);
 $dados = $usuario->listarUm();
 
+$sessao->verificaAcessoAdmin();
+
 // Utilitarios::dump($dados);
 
 if (isset($_POST['atualizar'])) {

@@ -44,10 +44,14 @@ final class ControleDeAcesso
         die(); // exit;
     }
 
-//     public function estaAutorizado($dados, $tipo):array {
-//         //os indices equivalem a nivel 1 e nivel 2
-//         $tipo = [
-//             'admin' => ['noticias.php', 'categorias.php', 'usuarios.php','meu-perfil.php' ],
-//             'editor' => ['noticias.php', 'meu-perfil.php']
-//         ];
+    public function verificaAcessoAdmin():void {
+
+        if ($_SESSION['tipo'] !== 'admin')  {
+
+            /* então significa que o usuario não esta logado, portanto apague qualquer
+            requicio de sessão e force o usuario a ir para o login.php */
+            header("location:nao-autorizado.php");
+            die();
+        } 
+    }
 }

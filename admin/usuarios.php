@@ -8,6 +8,7 @@ $usuario = new Usuario;
 
 $listaDeUsuarios = $usuario->listar();
 
+$sessao->verificaAcessoAdmin();
 // Utilitarios::dump($listaDeUsuarios);
 
 

@@ -8,6 +8,10 @@ $sessao = new ControleDeAcesso;
 // Executamos verificaAcesso para checar se tem alguém logado
 $sessao->verificaAcesso();
 
+// executando o verificaAcessoAdmin para ver o tipo de usuario
+
+
+
 // se o parametro ?sair existir, entao faça logout
 if (isset($_GET['sair']))  {
     $sessao->logout();
