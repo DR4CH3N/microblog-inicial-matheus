@@ -1,8 +1,23 @@
 <?php 
 require_once "../inc/cabecalho-admin.php";
 
+use Microblog\Categorias;
+use Microblog\Utilitarios;
+
 
 $sessao->verificaAcessoAdmin();
+
+
+
+$categoria = new Categorias;
+
+$listaDeCategorias = $categoria->listarCategoria();
+
+$sessao->verificaAcessoAdmin();
+// Utilitarios::dump($listaDeUsuarios);
+
+
+
 ?>
 
 

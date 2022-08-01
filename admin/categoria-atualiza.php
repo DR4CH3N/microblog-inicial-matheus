@@ -1,7 +1,31 @@
 <?php 
 require_once "../inc/cabecalho-admin.php";
 
+
+
+
+use Microblog\Categorias;
+use Microblog\Utilitarios;
+
 $sessao->verificaAcessoAdmin();
+
+$usuario = new Categorias;
+
+$usuario->setId($_GET['id']);
+$dados = $categoria->listarUm();
+
+
+
+// Utilitarios::dump($dados);
+
+if (isset($_POST['atualizar'])) {
+	$categoria->setNome($_POST['nome']);
+	
+
+
+	$categoria->atualizar();
+	header("location:usuarios.php");
+}
 ?>
 
 
