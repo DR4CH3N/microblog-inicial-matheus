@@ -1,6 +1,18 @@
-<?php 
+<?php
+
+use Microblog\Categoria;
+use Microblog\Noticia;
+use Microblog\Utilitarios;
+
 require_once "../inc/cabecalho-admin.php";
+
+$categoria = new Categoria;
+$noticia = new Noticia;
+
+$ListaDeCategorias = $categoria->listarCategoria();
+
 ?>
+
 
 
 <div class="row">
@@ -15,16 +27,20 @@ require_once "../inc/cabecalho-admin.php";
             <div class="mb-3">
                 <label class="form-label" for="categoria">Categoria:</label>
                 <select class="form-select" name="categoria" id="categoria" required>
-					<option value=""></option>
-					<option value="1">Ciência</option>
-					<option value="2">Educação</option>
-					<option value="3">Tecnologia</option>
+				<option value=""></option>
+
+				<?php foreach($ListaDeCategorias as $categoria) { ?>
+                 <!-- o value id é para o banco -->
+                <option value="<?=$categoria['id']?>">
+                    <?=$categoria['nome']?> <!-- exibição -->
+                </option>
+            <?php } ?>
 				</select>
 			</div>
 
 			<div class="mb-3">
                 <label class="form-label" for="titulo">Título:</label>
-                <input class="form-control" required type="text" id="titulo" name="titulo" >
+                <input class="form-control" required type="text" id="titulo" name="titulo">
 			</div>
 
 			<div class="mb-3">

@@ -194,4 +194,10 @@ final class Usuario {
 
         
     }
+
+    
+    public function getConexao(): PDO
+    {
+        return $this->conexao;
+    }
 }
