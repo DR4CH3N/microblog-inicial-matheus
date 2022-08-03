@@ -81,19 +81,6 @@ final class Noticia {
     }
 
     
-    public function getData(): string
-    {
-        return $this->data;
-    }
-
-    
-    public function setData(string $data)
-    {
-        $this->nome = filter_var($data, FILTER_SANITIZE_SPECIAL_CHARS);
-
-        return $this;
-    }
-
     
     public function getTitulo(): string
     {
