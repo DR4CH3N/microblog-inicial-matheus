@@ -22,6 +22,8 @@ final class Noticia {
     */
     public Usuario $usuario;
 
+    
+
     private PDO $conexao;
 
     public function __construct()

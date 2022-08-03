@@ -11,6 +11,21 @@ $noticia = new Noticia;
 
 $ListaDeCategorias = $categoria->listarCategoria();
 
+if (isset($_POST['inserir'])) {
+    $noticia = new Noticia;
+    $noticia->setTitulo($_POST['titulo']);
+    $noticia->setTexto($_POST['texto']);
+    $noticia->setResumo($_POST['resumo']);
+    $noticia->setDestaque($_POST['destaque']);
+    $noticia->setCategoriaId($_POST['categoria']);
+
+    $noticia->setImagem('alguma coisa da imagem');
+
+    /* aplicamos o id do usuario logado na sessão a proriedade id da classe/objeto usuario */
+    $noticia->usuario->setId($_SESSION['id']);
+
+    Utilitarios::dump($noticia);
+}
 ?>
 
 
