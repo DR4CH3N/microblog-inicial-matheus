@@ -1,18 +1,15 @@
 <?php 
 require_once "../inc/cabecalho-admin.php";
 
-
-
-
-use Microblog\Categorias;
+use Microblog\Categoria;
 use Microblog\Utilitarios;
 
 $sessao->verificaAcessoAdmin();
 
-$usuario = new Categorias;
+$categoria = new Categoria;
 
-$usuario->setId($_GET['id']);
-$dados = $categoria->listarUm();
+$categoria->setId($_GET['id']);
+$dados = $categoria->listarUmaCategoria();
 
 
 
@@ -21,10 +18,8 @@ $dados = $categoria->listarUm();
 if (isset($_POST['atualizar'])) {
 	$categoria->setNome($_POST['nome']);
 	
-
-
-	$categoria->atualizar();
-	header("location:usuarios.php");
+	$categoria->atualizarCategoria();
+	header("location:categorias.php");
 }
 ?>
 
@@ -40,7 +35,7 @@ if (isset($_POST['atualizar'])) {
 
 			<div class="mb-3">
 				<label class="form-label" for="nome">Nome:</label>
-				<input class="form-control" type="text" id="nome" name="nome" required>
+				<input value="<?=$dados['nome']?>" class="form-control" type="text" id="nome" name="nome" required>
 			</div>
 			
 			<button class="btn btn-primary" name="atualizar"><i class="bi bi-arrow-clockwise"></i> Atualizar</button>

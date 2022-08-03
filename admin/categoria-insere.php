@@ -1,5 +1,6 @@
 <?php
 
+use Microblog\Categoria;
 use Microblog\Categorias;
 use Microblog\Usuario;
 
@@ -10,13 +11,13 @@ $sessao->verificaAcessoAdmin();
 
 if (isset($_POST['inserir'])) {
 
-	$categoria = new Categorias;
+	$categoria = new Categoria;
 	$categoria->setNome($_POST['nome']);
-	
+	$categoria->InserirCategoria();
 
 	
 
-	header("location:usuarios.php"); 
+	header("location:categorias.php"); 
 }
 
 ?>

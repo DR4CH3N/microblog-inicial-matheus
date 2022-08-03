@@ -3,7 +3,7 @@
 namespace Microblog;
 use PDO, Exception;
 
-final class Categorias {
+final class Categoria {
     private int $id;
     private string $nome;
     private PDO $conexao;
@@ -13,7 +13,7 @@ final class Categorias {
         $this->conexao = Banco::conecta();
     }
 
-    public function listarCategoria():array{
+        public function listarCategoria():array {
         $sql = "SELECT id, nome
         FROM categorias ORDER BY nome";    
 
@@ -28,22 +28,7 @@ final class Categorias {
         return $resultado;
 
 }
-
-        public function InserirCategoria():void{
-        $sql = "INSERT INTO categorias(nome)
-        VALUES(:nome)";
-
-        try {
-        $consulta = $this->conexao->prepare($sql);
-        $consulta->bindParam(":nome", $this->nome, PDO::PARAM_STR);
-        $consulta->execute();
-        } catch (Exception $erro) {
-        die("Erro: ". $erro->getMessage());
-        }    
-
-}
-   
-    public function listarUmaCategoria():array {
+        public function listarUmaCategoria():array {
         $sql = "SELECT * FROM categorias WHERE id = :id";
 
         try {
@@ -57,28 +42,44 @@ final class Categorias {
         return $resultado;
 }
 
-    public function atualizarCategoria():void {
-    $sql = "UPDATE categorias SET nome = :nome WHERE id = :id";
+        public function InserirCategoria():void {
+        $sql = "INSERT INTO categorias(nome)
+        VALUES(:nome)";
+
+        try {
+        $consulta = $this->conexao->prepare($sql);
+        $consulta->bindParam(":nome", $this->nome, PDO::PARAM_STR);
+        $consulta->execute();
+        } catch (Exception $erro) {
+        die("Erro: ". $erro->getMessage());
+        }    
+
+}
+   
+   
+
+        public function atualizarCategoria():void {
+        $sql = "UPDATE categorias SET nome = :nome WHERE id = :id";
     
-    try {
+        try {
         $consulta = $this->conexao->prepare($sql);
         $consulta->bindParam(":nome", $this->nome, PDO::PARAM_STR);
         $consulta->bindParam(":id", $this->id, PDO::PARAM_INT);
         $consulta->execute();
-    } catch (Exception $erro) {
+        } catch (Exception $erro) {
         die("Erro: ". $erro->getMessage());   
-    }
+        }
 }
-    public function excluirCategoria():void {
-    $sql = "DELETE FROM categorias WHERE id = :id";
+        public function excluirCategoria():void {
+        $sql = "DELETE FROM categorias WHERE id = :id";
 
-    try {
+        try {
         $consulta = $this->conexao->prepare($sql);
         $consulta->bindParam(":id", $this->id, PDO::PARAM_INT);
         $consulta->execute();
-    } catch (Exception $erro) {
+        } catch (Exception $erro) {
         die("Erro: ". $erro->getMessage());   
-    }
+        }
 }
 
     public function getId(): int
@@ -89,9 +90,9 @@ final class Categorias {
     
     public function setId(int $id)
     {
-        $this->id = $id;
+        $this->id = filter_var($id, FILTER_SANITIZE_NUMBER_INT);
 
-        return $this;
+        
     }
 
    
@@ -103,7 +104,7 @@ final class Categorias {
     
     public function setNome(string $nome)
     {
-        $this->nome = $nome;
+        $this->nome = filter_var($nome, FILTER_SANITIZE_SPECIAL_CHARS);
 
         return $this;
     }
