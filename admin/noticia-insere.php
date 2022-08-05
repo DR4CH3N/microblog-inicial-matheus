@@ -1,5 +1,42 @@
-<?php 
+<?php
+use Microblog\Categoria;
+use Microblog\Noticia;
+use Microblog\Utilitarios;
 require_once "../inc/cabecalho-admin.php";
+
+$categoria = new Categoria;
+$listaDeCategorias = $categoria->listarCategoria();
+
+if(isset($_POST['inserir'])){
+	$noticia = new Noticia;
+	$noticia->setTitulo($_POST['titulo']);
+	$noticia->setTexto($_POST['texto']);
+	$noticia->setResumo($_POST['resumo']);
+	$noticia->setDestaque($_POST['destaque']);
+	$noticia->setCategoriaId($_POST['categoria']);
+
+	$noticia->usuario->setId($_SESSION['id']);
+	
+	/* capturando os dados do arquivo enviado */
+
+	$imagem = $_FILES["imagem"];
+
+	/* função upload (responsavel por pegar o arquivo inteiro e enviar para o HD do servidor) */
+	$noticia->upload($imagem);
+
+
+	/* enviamos para o setter (e para o banco) SOMENTE
+	a parte que se refere ao nome/extnsão do arquivo
+	OBS: as vezes o PHP pode mudar o nome das coisas dentro do array
+	certifique-se de dar um var_dump para não causar confusão */
+	$noticia->setImagem($imagem['name']);
+
+	/* Aplicamos o id do usuário logado na sessão
+	à propriedade id da classe/objeto Usuario */
+
+	$noticia->inserirNoticia();
+	header("location:noticias.php");
+}
 ?>
 
 
@@ -10,15 +47,19 @@ require_once "../inc/cabecalho-admin.php";
 		Inserir nova notícia
 		</h2>
 				
-		<form class="mx-auto w-75" action="" method="post" id="form-inserir" name="form-inserir">
+		<form enctype="multipart/form-data" class="mx-auto w-75" action="" method="post" id="form-inserir" name="form-inserir">
 
             <div class="mb-3">
                 <label class="form-label" for="categoria">Categoria:</label>
                 <select class="form-select" name="categoria" id="categoria" required>
 					<option value=""></option>
-					<option value="1">Ciência</option>
-					<option value="2">Educação</option>
-					<option value="3">Tecnologia</option>
+					
+					<?php foreach($listaDeCategorias as $categoria) { ?>
+					<option value="<?=$categoria['id']?>"> 
+						<?=$categoria['nome']?> 
+					</option>
+					<?php } ?>
+					
 				</select>
 			</div>
 
@@ -64,4 +105,3 @@ require_once "../inc/cabecalho-admin.php";
 <?php 
 require_once "../inc/rodape-admin.php";
 ?>
-
