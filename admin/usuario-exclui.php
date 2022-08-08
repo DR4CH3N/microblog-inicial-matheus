@@ -15,7 +15,7 @@ $usuario = new Usuario; // Não esqueça do autoload e do namespace
 $usuario->setId($_GET['id']);
 
 // Só então executamos o método de exclusão
-$usuario->excluirUsuario();
+$usuario->excluir();
 
 // Após excluir, redirecionamos para a página de lista de usuários
 header("location:usuarios.php");

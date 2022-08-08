@@ -48,6 +48,8 @@ if (isset($_GET['perfil_atualizado']) ) {
                 Usuários
             </a>
             <?php } ?>
+
+            
             <a class="btn btn-dark bg-gradient btn-lg" href="noticias.php">
                 <i class="bi bi-newspaper"></i> <br>
                 Notícias

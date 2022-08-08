@@ -66,12 +66,32 @@ final class Noticia {
         /* se o tipo de usuario logado for admin */
         if ($this->usuario->getTipo() === 'admin') {
             /* então ele podera acessar as noticias de todo mundo */
-            $sql = "";
+            $sql = "SELECT noticias.id, noticias.titulo, noticias.data, noticias.destaque, usuarios.nome AS autor FROM noticias LEFT JOIN usuarios
+            ON noticias.usuario_id = usuarios.id
+
+            ORDER BY DATA DESC";
         } else {
             /* senão (ou seja, um editor), esse usuario (editor) poderá acessar SOMENTE suas proprias noticias */
-            $sql = "";
+            $sql = "SELECT id, titulo, data, destaque FROM noticias
+            WHERE usuario_id = :usuario_id
+            ORDER BY data DESC";
         }
-    }
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            
+            /* se NÃO for um usuario admin, então trate o parametro de usuario_id antes de executar */
+            if ($this->usuario->getTipo() !== 'admin') {
+                $consulta->bindValue(":usuario_id",  $this->usuario->getId(), PDO::PARAM_INT);
+            }
+            $consulta->execute();
+            $resultado = $consulta->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $erro) {
+            die("Erro: ". $erro->getMessage());
+        } 
+        
+        return $resultado; 
+    } /* final do listar */
 
     public function upload(array $arquivo) {
         // definindo os formatos aceitos
