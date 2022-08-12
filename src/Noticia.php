@@ -61,6 +61,42 @@ final class Noticia {
         }   
            
     }
+    public function listarUm():array {
+        /* se o tipo de usuario logado for admin */
+        if ($this->usuario->getTipo() === 'admin') {
+            /* então ele podera acessar as noticias de todo mundo */
+            $sql = "SELECT titulo, texto, resumo, imagem, usuario_id, categoria_id, destaque 
+            FROM noticias WHERE id = :id";
+
+        } else {
+            /* senão (ou seja, um editor), esse usuario (editor) poderá acessar SOMENTE suas proprias noticias */
+            $sql = "SELECT titulo, texto, resumo, imagem, usuario_id, categoria_id, destaque 
+            FROM noticias WHERE id = :id AND usuario_id = :usuario_id";
+        }
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+
+            $consulta->bindParam(":id",  $this->id, PDO::PARAM_INT);
+            
+            /* se NÃO for um usuario admin, então trate o parametro de usuario_id antes de executar */
+            if ($this->usuario->getTipo() !== 'admin') {
+                // parametro id da noticia
+                
+
+                // parametro usuario_id
+                $consulta->bindValue(":usuario_id",  $this->usuario->getId(), PDO::PARAM_INT);
+
+            } 
+            $consulta->execute();
+            $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $erro) {
+            die("Erro: ". $erro->getMessage());
+        } 
+        
+        return $resultado; 
+    } /* final do listar */
+
 
     public function listarNoticia():array {
         /* se o tipo de usuario logado for admin */
