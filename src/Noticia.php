@@ -59,8 +59,56 @@ final class Noticia {
         } catch (Exception $erro) {
             die("Erro: ". $erro->getMessage());
         }   
+
+        
            
     }
+
+    public function atualizar():void{
+        /* se o tipo de usuario logado for admin */
+        if ($this->usuario->getTipo() === 'admin') {
+            /* então ele podera acessar as noticias de todo mundo */
+            $sql = "UPDATE noticias 
+            SET titulo = :titulo, texto = :texto, resumo = :resumo, imagem = :imagem, categoria_id = :categoria_id, destaque = :destaque 
+            WHERE id = :id";
+
+        } else {
+            /* senão (ou seja, um editor), esse usuario (editor) poderá acessar SOMENTE suas proprias noticias */
+            $sql = "UPDATE noticias 
+            SET titulo = :titulo, texto = :texto, resumo = :resumo, imagem = :imagem, categoria_id = :categoria_id, destaque = :destaque 
+            WHERE id = :id
+            AND usuario_id = :usuario_id";
+            
+        }
+        try {
+            $consulta = $this->conexao->prepare($sql);
+
+            $consulta->bindParam(":id",  $this->id, PDO::PARAM_INT);
+            $consulta->bindParam(":titulo",  $this->titulo, PDO::PARAM_STR);
+            $consulta->bindParam(":texto",  $this->texto, PDO::PARAM_STR);
+            $consulta->bindParam(":resumo",  $this->resumo, PDO::PARAM_STR);
+            $consulta->bindParam(":imagem",  $this->imagem, PDO::PARAM_STR);
+            $consulta->bindParam(":categoria_id",  $this->categoriaId, PDO::PARAM_INT);
+            $consulta->bindParam(":destaque",  $this->destaque, PDO::PARAM_STR);
+            
+            
+            /* se NÃO for um usuario admin, então trate o parametro de usuario_id antes de executar */
+            if ($this->usuario->getTipo() !== 'admin') {
+                // parametro id da noticia
+                
+
+                // parametro usuario_id
+                $consulta->bindValue(":usuario_id",  $this->usuario->getId(), PDO::PARAM_INT);
+
+            } 
+            $consulta->execute();
+            $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
+        } catch (Exception $erro) {
+            die("Erro: ". $erro->getMessage());
+        } 
+        
+    } 
+
     public function listarUm():array {
         /* se o tipo de usuario logado for admin */
         if ($this->usuario->getTipo() === 'admin') {
@@ -128,6 +176,17 @@ final class Noticia {
         
         return $resultado; 
     } /* final do listar */
+
+    public function excluirNoticia():void {
+        $sql = "DELETE FROM noticias WHERE id = :id";
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindParam(":id", $this->id, PDO::PARAM_INT);
+            $consulta->execute();
+        } catch (Exception $erro) {
+            die("Erro: ". $erro->getMessage());
+        }
+    }
 
     public function upload(array $arquivo) {
         // definindo os formatos aceitos

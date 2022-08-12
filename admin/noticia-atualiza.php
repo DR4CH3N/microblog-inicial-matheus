@@ -14,6 +14,29 @@ $noticia->usuario->setId($_SESSION['id']);
 $noticia->usuario->setTipo($_SESSION['tipo']);
 $dados = $noticia->listarUm();
 
+
+if(isset($_POST['atualizar'])) {
+	$noticia->setTitulo($_POST['titulo']);
+	$noticia->setTexto($_POST['texto']);
+	$noticia->setResumo($_POST['resumo']);
+	$noticia->setDestaque($_POST['destaque']);
+	$noticia->setCategoriaId($_POST['categoria']);
+
+    /* logica/algoritmo para atualizar a foto se necessario */
+
+    /* se o campo imagem estiver vazio, então significa que o usuario NÃO QUER TROCAR DE IMAGEM ou seja, manter a imagem existente */
+    if ( empty($_FILES['imagem']['name']) ) {
+        $noticia->setImagem($_POST['imagem-existente']);
+    } else {
+        /* senão, então pegamos a referencia (nome e extensão) 
+        da nova imagem e fazemos o processo de upload e envio desta referencia para o banco */
+        $noticia->upload($_FILES['imagem']);
+        $noticia->setImagem($_FILES['imagem'] ['name']);
+    }
+
+    $noticia->atualizar();
+    header("location:noticias.php");
+}
 ?>
 
 
@@ -24,7 +47,7 @@ $dados = $noticia->listarUm();
             Atualizar dados da notícia
         </h2>
 
-        <form class="mx-auto w-75" action="" method="post" id="form-atualizar" name="form-atualizar">
+        <form class="mx-auto w-75" action="" method="post" id="form-atualizar" name="form-atualizar" enctype="multipart/form-data">
 
             <div class="mb-3">
                 <label class="form-label" for="categoria">Categoria:</label>
@@ -71,10 +94,16 @@ $dados = $noticia->listarUm();
 
             <div class="mb-3">
                 <p>Deixar a notícia em destaque?
-                    <input type="radio" class="btn-check" name="destaque" id="nao" autocomplete="off" checked value="nao">
+                    <input type="radio" class="btn-check" name="destaque" id="nao" autocomplete="off" 
+                    <?php if ($dados['destaque'] === 'nao') echo ' checked '  ?>
+                    value="nao">
                     <label class="btn btn-outline-danger" for="nao">Não</label>
 
-                    <input type="radio" class="btn-check" name="destaque" id="sim" autocomplete="off" value="sim">
+
+
+                    <input type="radio" class="btn-check" name="destaque" id="sim" autocomplete="off"
+                    <?php if ($dados['destaque'] === 'sim') echo ' checked '  ?>
+                    value="sim">
                     <label class="btn btn-outline-success" for="sim">Sim</label>
                 </p>
             </div>
