@@ -14,5 +14,9 @@ abstract class Utilitarios {
     public static function formataData(string $data):string {
         return date("d/m/y H:i", strtotime($data));
     }
+
+public static function limitaCaracterere($dados) {
+        return mb_strimwidth($dados, 0, 20, " ...");
+    }
 }
 
