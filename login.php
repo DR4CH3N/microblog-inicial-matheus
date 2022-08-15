@@ -99,8 +99,7 @@ if (isset($_GET['acesso_proibido']) ) {
     
 </div>        
         
-        
-    
+<?= include_once "inc/todas.php"; ?>
 
 
 

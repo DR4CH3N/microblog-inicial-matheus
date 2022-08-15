@@ -1,6 +1,11 @@
 <?php
+
+use Microblog\Categoria;
+
 require_once "vendor/autoload.php";
 
+$categoria = new Categoria;
+$listaDeCategorias = $categoria->listarCategoria();
 ?>
 
 <!DOCTYPE html>
@@ -33,15 +38,22 @@ require_once "vendor/autoload.php";
         </li>
         
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="noticias.php" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             Categorias
           </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="noticias-por-categoria.php">Ciência</a></li>
-            <li><a class="dropdown-item" href="noticias-por-categoria.php">Educação</a></li>
-            <li><a class="dropdown-item" href="noticias-por-categoria.php">Tecnologia</a></li>
+          <ul class="dropdown-menu" 
+            aria-labelledby="navbarDropdown">
+            <?php foreach ($listaDeCategorias as $categoria) { ?>
+            <li>
+            <a class="dropdown-item" 
+            href="noticias-por-categoria.php?id=<?=$categoria['id']?>">
+            <?=$categoria['nome'] ?>
+            </a>
+            </li>
+            <php } ?>
           </ul>
-        </li>
+       </li>
+  
         <li class="nav-item">
           <a class="nav-link" href="admin/index.php"><i class="bi bi-lock-fill"></i> Área administrativa</a>
         </li>
@@ -51,6 +63,7 @@ require_once "vendor/autoload.php";
         <input class="form-control me-2" type="search" placeholder="Pesquise aqui" aria-label="Pesquise aqui">
         <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">OK</button>
       </form>
+      
     </div>
   </div>
 </nav>
@@ -58,6 +71,7 @@ require_once "vendor/autoload.php";
 </header>
 
 <main class="flex-shrink-0">
-    <div class="container">
 
-    
+<div class="container">
+
+  

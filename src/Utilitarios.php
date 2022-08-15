@@ -18,5 +18,9 @@ abstract class Utilitarios {
 public static function limitaCaracterere($dados) {
         return mb_strimwidth($dados, 0, 20, " ...");
     }
+
+    public static function formataTexto(string $texto):string {
+        return nl2br($texto);
 }
 
+}
