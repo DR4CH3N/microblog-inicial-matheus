@@ -21,7 +21,7 @@ $resultados = $noticia->busca();
             <div class="card-body">
                 <h3 class="fs-4 card-title fw-light"><?=$resultado['titulo']?></h3>
                 <p class="card-text">
-                    <time><?=Utilitarios::formataData($resultado['data']) ?></time> - 
+                    <time datetime="<?=$resultado['data']?>"><?=Utilitarios::formataData($resultado['data']) ?></time> - 
                     <?=$resultado['resumo']?>
                 </p>
                  
