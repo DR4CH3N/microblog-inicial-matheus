@@ -1,8 +1,13 @@
 <?php
-use Microblog\Categoria;
+// inicialização do output buffer
+// gerenciamento da memoria de saidas/redirecionamentos
+ob_start();
 
+use Microblog\Categoria;
+use Microblog\Noticia;
 require_once "vendor/autoload.php"; 
 $categoria = new Categoria;
+$noticia = new Noticia;
 $listaDeCategorias = $categoria->listarCategoria();
 ?>
 <!DOCTYPE html>
@@ -54,8 +59,11 @@ $listaDeCategorias = $categoria->listarCategoria();
         </li>
       </ul>
 
-      <form autocomplete="off" class="d-flex" action="resultados.php" method="POST">
-        <input class="form-control me-2" type="search" placeholder="Pesquise aqui" aria-label="Pesquise aqui">
+      <!-- FORMULARIO DE BUSCA -->
+
+
+      <form autocomplete="off" class="d-flex" action="resultados.php" method="GET">
+        <input name="busca" class="form-control me-2" type="search" placeholder="Pesquise aqui" aria-label="Pesquise aqui">
         <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">OK</button>
       </form>
     </div>

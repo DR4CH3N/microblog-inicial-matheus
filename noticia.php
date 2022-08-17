@@ -1,11 +1,11 @@
 <?php
 
-use Microblog\Noticia;
+
 use Microblog\Utilitarios;
 
 require_once "inc/cabecalho.php";
 
-$noticia = new Noticia;
+
 $noticia->setId($_GET['id']);
 $dados = $noticia->listarDetalhes();
 
